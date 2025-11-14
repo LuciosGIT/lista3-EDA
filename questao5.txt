@@ -1,0 +1,3 @@
+a. É importante considerar a complexidade algorítmica porque ela indica quanto tempo o algoritmo vai levar para encontrar a melhor rota. Se escolhermos um algoritmo muito lento, o tempo de cálculo cresce rápido demais quando aumentamos o número de entregas, tornando o sistema impraticável.
+
+b. A notação Big O permite comparar algoritmos mostrando qual deles cresce mais devagar em tempo de execução. Assim, conseguimos identificar qual algoritmo é mais eficiente e escolher aquele que calcula as rotas mais rápido, mesmo quando há muitas entregas.

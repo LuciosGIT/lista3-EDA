@@ -1,0 +1,9 @@
+O QuickSort pode ficar muito lento no pior caso, principalmente quando o pivô escolhido é ruim e produz partições muito desbalanceadas (como em vetores já ordenados).
+Para reduzir esse problema, usa-se a estratégia da mediana de três.
+
+Antes de escolher o pivô, o algoritmo compara três elementos do vetor:
+o primeiro, o do meio, o último.
+
+Entre esses três, ele escolhe o valor mediano (o que não é nem o maior nem o menor) como pivô.
+
+Isso melhora o desempenho, pois diminui a chance de escolher um pivô muito ruim. Evita o pior caso em vetores já ordenados. Gera partições mais equilibradas, deixando o algoritmo mais próximo de O(n log n) e, além disso, custa muito pouco computacionalmente.

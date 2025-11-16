@@ -70,29 +70,27 @@ def quick_sort(arr):
     right= [x for x in arr if x > pivot]
     return quick_sort(left) + mid + quick_sort(right)
 
-def heap_sort(arr):
+def cycle_sort(arr):
     n = len(arr)
-
-    def heapify(arr, n, i):
-        largest = i 
-        l = 2*i + 1 
-        r = 2*i + 2 
-
-        if l < n and arr[l] > arr[largest]:
-            largest = l
-        if r < n and arr[r] > arr[largest]:
-            largest = r
-        
-        if largest != i:
-            arr[i], arr[largest] = arr[largest], arr[i]
-            heapify(arr, n, largest)
-
-    for i in range(n//2 - 1, -1, -1):
-        heapify(arr, n, i)
-
-    for i in range(n-1, 0, -1):
-        arr[i], arr[0] = arr[0], arr[i]
-        heapify(arr, i, 0)
+    for cycle_start in range(0, n - 1):
+        item = arr[cycle_start]
+        pos = cycle_start
+        for i in range(cycle_start + 1, n):
+            if arr[i] < item:
+                pos += 1
+        if pos == cycle_start:
+            continue
+        while item == arr[pos]:
+            pos += 1
+        arr[pos], item = item, arr[pos]
+        while pos != cycle_start:
+            pos = cycle_start
+            for i in range(cycle_start + 1, n):
+                if arr[i] < item:
+                    pos += 1
+            while item == arr[pos]:
+                pos += 1
+            arr[pos], item = item, arr[pos]
 
 # TESTE DE TEMPO
 def medir_tempo(func, arr):
@@ -104,43 +102,29 @@ def medir_tempo(func, arr):
         func(A)
     return time.time() - inicio
 
-tamanhos_pequenos = [1000, 5000, 10000]
-tamanhos_grandes = [10000, 20000, 30000, 40000, 50000]
+tamanhos = [1000, 10000, 20000, 30000, 40000, 50000]
 
-algoritmos_quadraticos = [bubble_sort, selection_sort, insertion_sort]
-algoritmos_eficientes = [merge_sort, quick_sort, heap_sort]
+algoritmos = [
+    bubble_sort, selection_sort, insertion_sort,
+    merge_sort, quick_sort, cycle_sort
+]
 
-nomes_quad = ["Bubble", "Selection", "Insertion"]
-nomes_eff  = ["Merge", "Quick", "Heap"]
+nomes = [
+    "Bubble", "Selection", "Insertion",
+    "Merge", "Quick", "Cycle"
+]
 
 
-# TESTE 1 – Listas RANDÔMICAS
+resultados = {nome: [] for nome in nomes}
 
-resultados_quad = {nome: [] for nome in nomes_quad}
-resultados_eff  = {nome: [] for nome in nomes_eff}
-
-print("Rodando testes...")
-
-for n in tamanhos_pequenos:
+for n in tamanhos:
     base = [random.randint(1, 1000000) for _ in range(n)]
-    for alg, nome in zip(algoritmos_quadraticos, nomes_quad):
-        resultados_quad[nome].append(medir_tempo(alg, base))
-
-for n in tamanhos_grandes:
-    base = [random.randint(1, 1000000) for _ in range(n)]
-    for alg, nome in zip(algoritmos_eficientes, nomes_eff):
-        resultados_eff[nome].append(medir_tempo(alg, base))
-
-
-# GRAFICO 1 – Listas Randômicas
+    for alg, nome in zip(algoritmos, nomes):
+        resultados[nome].append(medir_tempo(alg, base))
 
 plt.figure(figsize=(10,6))
-for nome in nomes_quad:
-    plt.plot(tamanhos_pequenos, resultados_quad[nome], label=nome)
-
-for nome in nomes_eff:
-    plt.plot(tamanhos_grandes, resultados_eff[nome], label=nome)
-
+for nome in nomes:
+    plt.plot(tamanhos, resultados[nome], label=nome)
 plt.title("Tempo de Execução – Listas Randômicas")
 plt.xlabel("Tamanho da Lista")
 plt.ylabel("Tempo (s)")
@@ -148,22 +132,19 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-
-# TESTE 2 – Lista de 50.000 DESCENDENTE
-
 desc = list(range(50000, 0, -1))
 tempos_desc = []
-
-for alg in algoritmos_eficientes:
+for alg in algoritmos:
     tempos_desc.append(medir_tempo(alg, desc))
 
 plt.figure(figsize=(8,5))
-plt.bar(nomes_eff, tempos_desc)
+plt.bar(nomes, tempos_desc)
 plt.title("Tempo em Lista Descendente – 50.000 elementos")
 plt.ylabel("Tempo (s)")
 plt.grid(True, axis='y')
 plt.show()
 
-print("\nTempos em lista descendente:")
-for nome, t in zip(nomes_eff, tempos_desc):
-    print(f"{nome}: {t:.4f}s")
+for nome, t in zip(nomes, tempos_desc):
+    print(nome, f"{t:.4f}s")
+
+

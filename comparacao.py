@@ -60,15 +60,18 @@ def merge_sort(arr):
             arr[k] = R[j]
             j += 1
             k += 1
-
+            
 def quick_sort(arr):
     if len(arr) <= 1:
         return arr
-    pivot = arr[len(arr)//2]
-    left = [x for x in arr if x < pivot]
-    mid  = [x for x in arr if x == pivot]
-    right= [x for x in arr if x > pivot]
+    
+    pivot = arr[-1]  
+    left  = [x for x in arr[:-1] if x < pivot]
+    mid   = [x for x in arr if x == pivot]
+    right = [x for x in arr[:-1] if x > pivot]
+    
     return quick_sort(left) + mid + quick_sort(right)
+
 
 def cycle_sort(arr):
     n = len(arr)

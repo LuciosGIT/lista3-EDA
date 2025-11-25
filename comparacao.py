@@ -61,16 +61,23 @@ def merge_sort(arr):
             j += 1
             k += 1
             
-def quick_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    
-    pivot = arr[-1]  
-    left  = [x for x in arr[:-1] if x < pivot]
-    mid   = [x for x in arr if x == pivot]
-    right = [x for x in arr[:-1] if x > pivot]
-    
-    return quick_sort(left) + mid + quick_sort(right)
+def quick_sort(arr, left, right):
+    if left < right:
+        pi = partition(arr, left, right)
+        quick_sort(arr, left, pi-1)
+        quick_sort(arr, pi+1, right)
+
+def partition(arr, left, right):
+    pivot = arr[right]
+
+    i = left - 1
+
+    for j in range(left, right):
+        if arr[j] <= pivot:
+            i = i + 1
+    arr[i], arr[j] = arr[j], arr[i]
+    return i + 1
+
 
 
 def cycle_sort(arr):
